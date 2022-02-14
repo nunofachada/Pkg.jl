@@ -143,7 +143,7 @@ end
     @lazy info::PkgInfo
 end
 
-function summarize_pkginfo(pkginfo)
+function summarize_pkginfo(pkginfo::Union{PkgInfo, Nothing})
     # Package.toml
     repo   = getproperty_maybe(pkginfo,  :repo)
     subdir = getproperty_maybe(pkginfo,  :subdir)
@@ -151,7 +151,7 @@ function summarize_pkginfo(pkginfo)
     return summary
 end
 
-function summarize_pkgentry(pkgentry)
+function summarize_pkgentry(pkgentry::Union{PkgEntry, Nothing))
     # Registry.toml
     path          = getproperty_maybe(pkgentry, :path)
     registry_path = getproperty_maybe(pkgentry, :registry_path)
@@ -166,12 +166,12 @@ function summarize_pkgentry(pkgentry)
     return summary
 end
 
-function getproperty_maybe(x::T, field::Symbol) where T <: Union{PkgInfo, PkgEntry, Nothing}
+function getproperty_maybe(x::Union{PkgInfo, PkgEntry, Nothing}, field::Symbol)
     default_value = ""
     if x isa PkgInfo
         return something(getproperty(x, field), default_value)
     elseif x isa PkgEntry
-        if !LazilyInitializedFields.islazyfield(T, field)
+        if !LazilyInitializedFields.islazyfield(typeof(x), field)
             return something(getproperty(x, field), default_value)
         end
         if !isinit(x, field)
