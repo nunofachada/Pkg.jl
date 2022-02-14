@@ -151,7 +151,7 @@ function summarize_pkginfo(pkginfo::Union{PkgInfo, Nothing})
     return summary
 end
 
-function summarize_pkgentry(pkgentry::Union{PkgEntry, Nothing))
+function summarize_pkgentry(pkgentry::Union{PkgEntry, Nothing})
     # Registry.toml
     path          = getproperty_maybe(pkgentry, :path)
     registry_path = getproperty_maybe(pkgentry, :registry_path)
